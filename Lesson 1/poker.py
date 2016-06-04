@@ -33,6 +33,7 @@ def two_pair(ranks):
     else:
         return None
 
+
 def hand_rank(hand):
     """Return a value indicating the ranking of a hand"""
     ranks = card_ranks(hand)
@@ -54,43 +55,43 @@ def hand_rank(hand):
         return (1, kind(2, ranks), ranks)
     else:
         return (0, ranks)
-
+        
 def poker(hands):
     """Return the best hand: poker([hand,...]) >>> hand"""
-    return max(hands, key=hank_rank)
+    return max(hands, key=hand_rank)
 
-# def test():
-#     "Test cases for the functions in poker program."
-#     sf = "6C 7C 8C 9C TC".split()
-#     fk = "9D 9H 9S 9C 7D".split()
-#     fh = "TD TC TH 7C 7D".split()
-#     tp = "5S 5D 9H 9C 6S".split()
-#     assert hand_rank(sf) == (8,10)
-#     assert hand_rank(fk) == (7,9,7)
-#     assert hand_rank(fh) == (6,10,7)
-#     fkranks = card_ranks(fk)
-#     tpranks = card_ranks(tp)
-#     assert kind(4, fkranks) == 9
-#     assert kind(3, fkranks) == None
-#     assert kind(2, fkranks) == None
-#     assert kind(1, fkranks) == 7
-#     assert two_pair(fkranks) == None
-#     assert two_pair(tpranks) == (9,5)
-#     assert straight([9,8,7,6,5]) == True
-#     assert straight([9,8,8,6,5]) == False
-#     assert flush(sf) == True
-#     assert flush(fh) == False
-#     assert card_ranks(sf) == [10,9,8,7,6]
-#     assert card_ranks(fk) == [9,9,9,9,7]
-#     assert card_ranks(fh) == [10,10,10,7,7]
-#     assert poker([sf, fk, fh]) == sf
-#     assert poker([fh, fk]) == fk
-#     assert poker([fh, fh]) == fh
-#     assert poker([fh]) == fh
-#     assert poker([sf] + 99*[fh]) == sf
-#     print "tests pass"
+def test():
+    "Test cases for the functions in poker program."
+    sf = "6C 7C 8C 9C TC".split()
+    fk = "9D 9H 9S 9C 7D".split()
+    fh = "TD TC TH 7C 7D".split()
+    tp = "5S 5D 9H 9C 6S".split()
+    fkranks = card_ranks(fk)
+    tpranks = card_ranks(tp)
+    assert card_ranks(sf) == [10,9,8,7,6]
+    assert card_ranks(fk) == [9,9,9,9,7]
+    assert card_ranks(fh) == [10,10,10,7,7]
+    assert kind(4, fkranks) == 9
+    assert kind(3, fkranks) == None
+    assert kind(2, fkranks) == None
+    assert kind(1, fkranks) == 7
+    assert two_pair(fkranks) == None
+    assert two_pair(tpranks) == (9,5)
+    assert straight([9,8,7,6,5]) == True
+    assert straight([9,8,8,6,5]) == False
+    assert flush(sf) == True
+    assert flush(fh) == False
+    assert hand_rank(sf) == (8,10)
+    assert hand_rank(fk) == (7,9,7)
+    assert hand_rank(fh) == (6,10,7)
+    assert poker([sf, fk, fh]) == sf
+    assert poker([fh, fk]) == fk
+    assert poker([fh, fh]) == fh
+    assert poker([fh]) == fh
+    assert poker([sf] + 99*[fh]) == sf
+    print "tests pass"
 
 
 # if __name__ == "__main__":
-#     test()
+test()
    
