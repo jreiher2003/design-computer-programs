@@ -1,10 +1,50 @@
+        
+def poker(hands):
+    """Return the best hand: poker([hand,...]) >>> hand"""
+    return allmax(hands, key=hand_rank)
+
+def allmax(iterable, key=None):
+    "Return a list of all items equal to the max of the iterable."
+    result, maxval = [], None
+    key = key or (lambda x: x)
+    for x in iterable:
+        xval = key(x)
+        if not result or xval > maxval:
+            result, maxval = [x], xval
+        elif xval == maxval:
+            result.append(x)
+    return result
+
+def hand_rank(hand):
+    """Return a value indicating the ranking of a hand"""
+    ranks = card_ranks(hand)
+    if straight(ranks) and flush(hand):
+        return (8, max(ranks)) # 2 3 4 5 6 >>> (8,6) 
+    elif kind(4, ranks):
+        return (7, kind(4, ranks), kind(1,ranks)) # 9 9 9 9 3 >>> (7, 9, 3)
+    elif kind(3, ranks) and kind(2, ranks):
+        return (6, kind(3,ranks), kind(2, ranks))
+    elif flush(hand):
+        return (5, ranks)
+    elif straight(ranks):
+        return (4, max(ranks))
+    elif kind(3, ranks):
+        return (3, kind(3,ranks), ranks)
+    elif two_pair(ranks):
+        return (2, two_pair(ranks), ranks)
+    elif kind(2,ranks):
+        return (1, kind(2, ranks), ranks)
+    else:
+        return (0, ranks)
+
+
 def card_ranks(cards):
     """ Return a list of the ranks, 
     sorted highest to lowest
     """
     ranks = ["--23456789TJQKA".index(r) for r, s in cards]
     ranks.sort(reverse=True)
-    return ranks
+    return [5,4,3,2,1] if (ranks == [14,5,4,3,2]) else ranks
 
 def straight(ranks):
     """ Return True if the ordered ranks form a 5-card straight."""
@@ -33,39 +73,17 @@ def two_pair(ranks):
     else:
         return None
 
-
-def hand_rank(hand):
-    """Return a value indicating the ranking of a hand"""
-    ranks = card_ranks(hand)
-    if straight(ranks) and flush(hand):
-        return (8, max(ranks)) # 2 3 4 5 6 >>> (8,6) 
-    elif kind(4, ranks):
-        return (7, kind(4, ranks), kind(1,ranks)) # 9 9 9 9 3 >>> (7, 9, 3)
-    elif kind(3, ranks) and kind(2, ranks):
-        return (6, kind(3,ranks), kind(2, ranks))
-    elif flush(hand):
-        return (5, ranks)
-    elif straight(ranks):
-        return (4, max(ranks))
-    elif kind(3, ranks):
-        return (3, kind(3,ranks), ranks)
-    elif two_pair(ranks):
-        return (2, two_pair(ranks), ranks)
-    elif kind(2,ranks):
-        return (1, kind(2, ranks), ranks)
-    else:
-        return (0, ranks)
-        
-def poker(hands):
-    """Return the best hand: poker([hand,...]) >>> hand"""
-    return max(hands, key=hand_rank)
-
 def test():
     "Test cases for the functions in poker program."
-    sf = "6C 7C 8C 9C TC".split()
-    fk = "9D 9H 9S 9C 7D".split()
-    fh = "TD TC TH 7C 7D".split()
-    tp = "5S 5D 9H 9C 6S".split()
+    sf = "6C 7C 8C 9C TC".split() # staight flush
+    fk = "9D 9H 9S 9C 7D".split() # four of a kind
+    fh = "TD TC TH 7C 7D".split() # full house
+    tp = "5S 5D 9H 9C 6S".split() # two pair
+    s1 = "AS 2S 3S 4S 5C".split() # A-5 straight
+    sh = "2S 3S 4S 5C 6D".split() # 2-6 straight
+    s2 = "2C 3C 4C 8S AS".split() # A high
+    ah = "2S 3S 4S 5S 7C".split() # 7 high
+    # assert poker([s1, s2, ah, sh]) == sh
     fkranks = card_ranks(fk)
     tpranks = card_ranks(tp)
     assert card_ranks(sf) == [10,9,8,7,6]
@@ -84,11 +102,11 @@ def test():
     assert hand_rank(sf) == (8,10)
     assert hand_rank(fk) == (7,9,7)
     assert hand_rank(fh) == (6,10,7)
-    assert poker([sf, fk, fh]) == sf
-    assert poker([fh, fk]) == fk
-    assert poker([fh, fh]) == fh
-    assert poker([fh]) == fh
-    assert poker([sf] + 99*[fh]) == sf
+    assert poker([sf, fk, fh]) == [sf]
+    assert poker([fh, fk]) == [fk]
+    assert poker([fh, fh]) == [fh, fh]
+    assert poker([fh]) == [fh]
+    assert poker([sf] + 99*[fh]) == [sf]
     print "tests pass"
 
 
