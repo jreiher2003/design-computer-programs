@@ -23,16 +23,18 @@ def group(items):
 	"""return a list of [(count, x)....], hightest count first
 	"""
 	groups = [(items.count(x),x) for x in set(items)]
-	return groups
+	return sorted(groups, reverse=True)
 
 def unzip(groups):
-	count = tuple(sorted([(i[0]) for i in groups]))[::-1]
-	ranks = tuple(sorted([i[1] for i in groups]))[::-1]
-	return count, ranks
+	count = tuple([(i[0]) for i in groups])
+	ranks = tuple([i[1] for i in groups])
+	return [count, ranks]
 
-
+def unzip1(pairs):
+	return zip(*pairs)
 
 
 yep= group([7,10,7,9,7])
-
+pairs = group([7,10,7,9,7])
 print unzip(yep)
+print unzip1(pairs)
